@@ -22,16 +22,17 @@ if(pedido.some((pedidoState)=> pedidoState.id=== producto.id)){
   
 
   return (
-    <div className="md:flex gap-10">
-      <div className="md:w-1/3">
+    <div className="md:flex gap-10 max-md:flex">
+      <div className="md:w-1/3 max-md:w-1/3">
         <Image
           width={300}
           height={400}
           alt={`imagen producto ${producto.nombre}`}
           src={`/assets/img/${producto.imagen}.jpg`}
+          className="max-md:w-48"
         />
       </div>
-      <div className="md:w2/3">
+      <div className="md:w-2/3 max-md:w-2/3">
         <div className="flex justify-end">
           <button onClick={handleChangeModal}>
             <svg
@@ -50,8 +51,8 @@ if(pedido.some((pedidoState)=> pedidoState.id=== producto.id)){
             </svg>
           </button>
         </div>
-        <h1 className="text-3xl font-bold mt-5">{producto.nombre}</h1>
-        <p className="text-5xl mt-5 font-black text-amber-500">
+        <h1 className="text-3xl max-md:text-sm font-bold mt-5">{producto.nombre}</h1>
+        <p className="text-5xl max-md:text-xl mt-5 font-black text-amber-500">
           {formatearDinero(producto.precio)}
         </p>
         <div className="flex gap-4 mt-5">
@@ -104,7 +105,7 @@ if(pedido.some((pedidoState)=> pedidoState.id=== producto.id)){
         </div>
         <button
         type="button"
-        className="bg-indigo-600 hover:bg-indigo-800 px-5 py-2 mt-5 text-white font-bold uppercase rounded"
+        className="bg-indigo-600 hover:bg-indigo-800 px-5 py-2 mt-5 text-white font-bold max-md:text-xs uppercase rounded"
         onClick={()=>handleAgregarPedido({...producto, cantidad})}
         >
           {edicion? "Guardar Cambios" : "Añadir al pedido"}</button>

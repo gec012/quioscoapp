@@ -15,16 +15,65 @@ const QuioscoProvider = ({ children }) => {
   const [pedido, setPedido] = useState([])
   const [nombre, setNombre] = useState('')
   const [total, setTotal] = useState(0)
+  const [nroOrden, setNroOrden] = useState(0);
 
 
 
   const router = useRouter()
-
-
+  
   const obtenerCategorias = async () => {
     const { data } = await axios('/api/categorias')
+
     setCategorias(data)
   }
+  
+ 
+  const obtenerOrden = async () => {
+    try {
+      const { data } = await axios(`/api/ordenes/${nroOrden}`);
+      
+      const { pedido } = data;
+     
+      const editPedidos = pedido.map((p) => {
+        const { nombre, imagen, id } = p.producto;
+  
+        // Crea un objeto 'editProducto' y devuélvelo
+        return {
+          cantidad: p.cantidad,
+          precio: p.precio,
+          nombre: nombre,
+          imagen: imagen,
+          id: id,
+        };
+      });
+  
+      // Actualiza el estado de 'pedido' usando 'setPedido'
+      setPedido(editPedidos);
+  
+      // En este punto, 'pedido' aún no se ha actualizado en el componente,
+      // ya que React programará la actualización del estado.
+  
+      // Puedes acceder a 'editPedidos' directamente, ya que refleja el valor actualizado.
+  
+   
+    } catch (error) {
+      // Maneja cualquier error aquí
+     
+      throw error; // Vuelve a lanzar el error si es necesario
+    }
+  };
+  
+ 
+useEffect(()=>{
+ if(nroOrden !==0){
+  
+   obtenerOrden()
+ }
+
+},[nroOrden])
+
+
+  
   useEffect(() => {
     obtenerCategorias()
   }, [])
@@ -54,14 +103,24 @@ const QuioscoProvider = ({ children }) => {
 
   const handleAgregarPedido = ({ categoriaId, ...producto }) => {
     if (pedido.some(productoState => productoState.id === producto.id)) {
-      //actulizar pedido
+      //actualizar pedido
       const pedidoActualizado = pedido.map(productoAux => productoAux.id === producto.id ? producto : productoAux)
 
       setPedido(pedidoActualizado)
-      toast.success('Guardado Correctamente')
+      toast.success('Guardado Correctamente',{
+        
+        duration:1000,
+        
+      })
+      
     } else {
-      setPedido([...pedido, producto])
-      toast.success('Agregado al Pedido')
+      setPedido([...pedido, producto]);
+      toast.success('Agregado al Pedido',{
+        
+        duration:1000,
+        
+      });
+     
     }
 
     setModal(false)
@@ -95,7 +154,7 @@ const QuioscoProvider = ({ children }) => {
 
       setTimeout(()=>{
         router.push('/')
-      },3000)
+      },2000)
 
     } catch (error) {
       console.log(error)
@@ -122,6 +181,8 @@ const QuioscoProvider = ({ children }) => {
         nombre,
         setNombre,
         colocarOrden,
+        nroOrden,
+        setNroOrden,
         total
       }}
 

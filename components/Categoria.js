@@ -1,33 +1,24 @@
 import Image from "next/image";
-import useQuiosco from "../hooks/useQuiosco"
-const Categoria = ({categoria}) =>{
+import useQuiosco from "../hooks/useQuiosco";
+const Categoria = ({ categoria }) => {
+  const { categoriaActual, handleClickCategoria } = useQuiosco();
+  const { nombre, icono, id } = categoria;
 
-    const {categoriaActual, handleClickCategoria} = useQuiosco()
-    const {nombre, icono, id} = categoria;
-    
-
-
-    return(
-         <div className={`${categoriaActual?.id === id ? 'bg-amber-400': ''} flex items-center gap-4 w-full border p-5 hover:bg-amber-400`}>
-            <Image 
-                width={60}
-                height={60}
-                src={`/assets/img/icono_${icono}.svg`}
-                alt="Imagen icono" 
-            className="mr-5"
-        />
-
-        <button
+  return (
+    <div
+      className={`${
+        categoriaActual?.id === id ? "bg-amber-400" : ""
+      } flex items-center gap-4 w-full border-b-2 border-gray p-5 hover:bg-amber-400`}
+    >
+      <button
         type="button"
         className="text-2x1 font-bold hover:cursor-pointer"
-        onClick={()=> handleClickCategoria(id)}
-        >
-            {nombre}
+        onClick={() => handleClickCategoria(id)}
+      >
+        {nombre}
+      </button>
+    </div>
+  );
+};
 
-        </button>
-
-        </div>
-    )
-}
-
-export default Categoria
+export default Categoria;

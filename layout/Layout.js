@@ -5,9 +5,9 @@ import Modal from "react-modal";
 import { ToastContainer } from "react-toastify";
 import useQuiosco from "@/hooks/useQuiosco";
 import ModalProducto from "@/components/ModalProducto";
-
-
-import "react-toastify/dist/ReactToastify.css"
+import { useState } from "react";
+import "react-toastify/dist/ReactToastify.css";
+import Image from "next/image";
 
 const customStyles = {
   content: {
@@ -24,19 +24,23 @@ Modal.setAppElement("#__next");
 
 export default function Layout({ children, pagina }) {
   const { modal } = useQuiosco();
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
   return (
     <>
       <Head>
         <title>Cafe - {pagina}</title>
         <meta name="description" content="Cafeteria" />
       </Head>
-      <div className="md:flex">
-        <aside className="md:w-4/12 xl:w-1/4 2xl:w-1/5">
+      <div className="flex w-full   max-md:flex-col">
+        <aside className="md:w-/12 lg:w-5/12 xl:w-2/4 2xl:w-2/5 p-1 max-md:border-b-2 md:h-screen  ">
           <Sidebar />
         </aside>
-        <main className="md:w-8/12 xl:w-3/4 2xl:w-4/5 h-screen overflow-y-scroll">
-          <Pasos/>
+        <main className="">
+          <Pasos />
           <div className="p-10 ">{children}</div>
         </main>
       </div>
@@ -45,7 +49,7 @@ export default function Layout({ children, pagina }) {
           <ModalProducto />
         </Modal>
       )}
-      <ToastContainer/>
+      <ToastContainer />
     </>
   );
 }

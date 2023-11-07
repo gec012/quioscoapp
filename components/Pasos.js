@@ -25,7 +25,7 @@ const Pasos = () => {
 
   return (
     <>
-      <div className="flex justify-between mb-5">
+      <div className="flex justify-between">
         {pasos.map((paso) => (
           <button
             onClick={() => {
@@ -39,7 +39,7 @@ const Pasos = () => {
           </button>
         ))}
       </div>
-      <div className="bg-gray-100 mb-10">
+      <div className="mb-10">
         <div
           className="rounded-full bg-amber-500 text-xs leading-none h-2 text-center text-white"
           style={{ width: `${calcularProgreso()}%` }}
