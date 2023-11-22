@@ -1,7 +1,7 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/prisma";
 
  export default async function handler(req, res) {
- const prisma = new PrismaClient();
+
  
  
  //obtener ordenes
@@ -16,6 +16,7 @@ import { PrismaClient } from "@prisma/client";
     
     },
   });
+  await prisma.$disconnect()
   res.status(200).json(ordenes);
   }
 
@@ -42,7 +43,7 @@ import { PrismaClient } from "@prisma/client";
         },
       });
     });
-
+    await prisma.$disconnect()
     res.status(200).json(orden);
   }
 }

@@ -1,14 +1,36 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import axios from "axios";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  TextField,
+  Button,
+  Select,
+  MenuItem,
+  IconButton,
+} from "@mui/material";
+
+import { AddCircleOutline, Edit, Delete } from "@mui/icons-material";
+import UserForm from "@/components/UseForm";
+import FormEdit from "@/components/FormEdit";
+import ModalDelete from "@/components/ModalDelete";
 
 const User = () => {
   const [users, setUsers] = useState([]);
-  const [newUser, setNewUser] = useState({ nombre: '', correo: '', role: 'ADMIN' });
+
   const [showPassword, setShowPassword] = useState(false);
- 
+  const [isFormVisible, setIsFormVisible] = useState(false);
+  const [editedUser, setEditedUser] = useState({});
+  const [isEditFormVisible, setIsEditFormVisible] = useState(false);
+  const [deleteUserId, setDeleteUserId] = useState(null)
+  
 
-
-useEffect(() => {
+  useEffect(() => {
     const timer = setTimeout(() => {
       setShowPassword(false);
     }, 1000);
@@ -16,120 +38,154 @@ useEffect(() => {
     return () => clearTimeout(timer);
   }, [showPassword]);
 
-  const handleInputChange = (e) => {
-    setNewUser({
-      ...newUser,
-      [e.target.name]: e.target.value,
-    });
-
-    setShowPassword(true);
-  };
  
- 
-  
-
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('/api/users');
+      const response = await axios.get("/api/users");
       setUsers(response.data);
     } catch (error) {
-      console.error('Error al obtener usuarios:', error);
+      console.error("Error al obtener usuarios:", error);
     }
   };
 
   useEffect(() => {
-    // Definir una función dentro de useEffect para poder utilizar async/await
     const fetchData = async () => {
       await fetchUsers();
     };
 
-    fetchData(); // Llamar a la función dentro de useEffect
-  }, []); // Asegurarse de que el segundo argumento sea un array vacío
+    fetchData();
+  }, []);
 
-  const handleRegister = async () => {
+  const handleRegister = async (newUser) => {
     try {
-      const response = await axios.post('/api/users', newUser);
+      const response = await axios.post("/api/users", newUser);
 
       if (response.status === 201) {
         const createdUser = response.data;
-        console.log('Usuario creado:', createdUser);
-        // Recargar la lista de usuarios después de la creación
-        await fetchUsers(); // Asegurarse de que la actualización se realiza después de la creación
+        console.log("Usuario creado:", createdUser);
+        setIsFormVisible(false); // Oculta el formulario
+        await fetchUsers();
       } else {
-        console.error('Error al crear el usuario:', response.statusText);
+        console.error("Error al crear el usuario:", response.statusText);
       }
     } catch (error) {
-      console.error('Error al crear el usuario:', error);
+      console.error("Error al crear el usuario:", error);
     }
   };
+
+  const handleEdit = (userId) => {
+    const userToEdit = users.find((user) => user.id === userId);
+    setEditedUser(userToEdit);
+    setIsEditFormVisible(true);
+  };
+  const handleEditSubmit = async (editedUser) => {
+    try {
+      const response = await axios.put(`/api/users`, editedUser);
+
+      if (response.status === 200) {
+        console.log('Usuario actualizado con éxito.');
+        setIsEditFormVisible(false);
+        await fetchUsers();
+      } else {
+        console.error('Error al actualizar el usuario:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error al actualizar el usuario:', error);
+    }
+  };
+
+  const handleDelete = (userId) => {
+    setDeleteUserId(userId);
+  };
+
+  const handleConfirmDelete = async () => {
+    
+    if (deleteUserId) {
+      try {
+        console.log('aqui entre',deleteUserId)
+        const response = await axios.delete('/api/users', { data: { id: deleteUserId } });
+
+        if (response.status === 200) {
+          console.log('Usuario eliminado con éxito.');
+          await fetchUsers();
+        } else {
+          console.error('Error al eliminar el usuario:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error al eliminar el usuario:', error);
+      } finally {
+        setDeleteUserId(null);
+      }
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setDeleteUserId(null);
+  };
+
 
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-4">Lista de Usuarios</h1>
-      <ul className="mb-4">
-        {users.map((user) => (
-          <li key={user.id} className="mb-2">
-            {user.nombre} - {user.correo} - {user.role}
-          </li>
-        ))}
-      </ul>
-      <div className="bg-white p-6 rounded-md shadow-md">
-        <h2 className="text-2xl font-bold mb-4">Registrar Nuevo Usuario</h2>
-        <div className="mb-4">
-          <label className="block text-gray-600 mb-2">Nombre:</label>
-          <input
-            type="text"
-            name="nombre"
-            onChange={handleInputChange}
-            className="w-full p-2 border rounded-md"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-600 mb-2">Correo:</label>
-          <input
-            type="text"
-            name="correo"
-            onChange={handleInputChange}
-            className="w-full p-2 border rounded-md"
-          />
-        </div>
-        <div className="mb-4">
-        <label className="block text-gray-600 mb-2">Contraseña:</label>
-        <input
-          type={showPassword ? 'text' : 'password'}
-          name="password"
-          onChange={handleInputChange}
-          className="w-full p-2 border rounded-md"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-600 mb-2">Confirmar Contraseña:</label>
-        <input
-          type={showPassword ? 'text' : 'password'}
-          name="confirmPassword"
-          onChange={handleInputChange}
-          className="w-full p-2 border rounded-md"
-        />
-      </div>
-        <div className="mb-4">
-          <label className="block text-gray-600 mb-2">Rol:</label>
-          <select
-            name="role"
-            onChange={handleInputChange}
-            className="w-full p-2 border rounded-md"
-          >
-            <option value="ADMIN">ADMIN</option>
-            <option value="SUPERADMIN">SUPERADMIN</option>
-          </select>
-        </div>
-        <button
-          onClick={handleRegister}
-          className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200"
-        >
-          Registrar Usuario
-        </button>
-      </div>
+      <Button
+        variant="contained"
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        onClick={() => setIsFormVisible(true)}
+      >
+        Agregar usuario
+      </Button>
+
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Nombre</TableCell>
+              <TableCell>Correo</TableCell>
+              <TableCell>Rol</TableCell>
+              <TableCell>Acciones</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {users.map((user) => (
+              <TableRow key={user.id}>
+                <TableCell>{user.nombre}</TableCell>
+                <TableCell>{user.correo}</TableCell>
+                <TableCell>{user.role}</TableCell>
+                <TableCell>
+                  <IconButton
+                    onClick={() => handleEdit(user.id)}
+                    color="primary"
+                  >
+                    <Edit />
+                  </IconButton>
+                  <IconButton
+                    onClick={() => handleDelete(user.id)}
+                    color="secondary"
+                  >
+                    <Delete />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <ModalDelete
+        open={!!deleteUserId}
+        onClose={handleCancelDelete}
+        onConfirm={handleConfirmDelete}
+      />
+      {isFormVisible && <UserForm onRegister={handleRegister} />}
+      {isEditFormVisible && (
+         <FormEdit
+         user={editedUser}
+         onEdit={(editedUser) => handleEditSubmit(editedUser)}
+         onCancel={() => setIsEditFormVisible(false)}
+       />
+      )}
+      
     </div>
   );
 };

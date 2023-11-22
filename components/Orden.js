@@ -4,16 +4,27 @@ import { toast } from "react-toastify";
 import { formatearDinero } from "@/helpers";
 import useQuiosco from "@/hooks/useQuiosco";
 import { useRouter } from "next/router";
+import { pdf } from '@react-pdf/renderer';
+import Factura from '@/components/Factura';
+
 
 export default function Orden({ orden }) {
   const router = useRouter();
   const { id, nombre, total, pedido } = orden;
+  console.log(pedido)
   const { setNroOrden } = useQuiosco();
 
   const completarOrden = async () => {
     try {
       const data = await axios.post(`/api/ordenes/${id}`);
       toast.success("Orden Lista");
+      pdf(<Factura id={id} nombre={nombre} total={total} pedido={pedido}/>).toBlob().then(blob => {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `orden-${id}.pdf`;
+        link.click();
+      });
     } catch (error) {
       toast.error("Hubo un error");
     }
@@ -29,6 +40,7 @@ export default function Orden({ orden }) {
       <h3 className="text-2xl font-bold">Orden: {id}</h3>
       <p className="text-lg font-bold">Cliente: {nombre}</p>
         {pedido.map((plato) => (
+
           <div
             key={plato.id}
             className="py-3 flex border-b-2 border-color: #000 last-of-type:border-0 items-center"

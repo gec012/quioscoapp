@@ -1,10 +1,11 @@
-import { PrismaClient } from "@prisma/client" 
+import prisma from "@/prisma";
 
 
 
 export default async function handler(req, res) {
-  const prisma = new PrismaClient();
+
   const productos = await prisma.productos.findMany();
+  await prisma.$disconnect();
   res.status(200).json(productos);
 }
 
