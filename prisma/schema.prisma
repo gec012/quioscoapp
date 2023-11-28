@@ -23,7 +23,7 @@ model Producto{
 model Categoria{
   id Int @id @default(autoincrement())
   nombre String
-  icono String
+  icono String?
   productos Producto[]
 }
 

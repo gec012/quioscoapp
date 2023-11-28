@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 
-const FormEdit = ({ user, onEdit, onCancel }) => {
+const FormEditUser = ({ user, onEdit, onCancel }) => {
   const [editedUser, setEditedUser] = useState({
     id: user.id,
     nombre: user.nombre,
@@ -55,7 +55,7 @@ const FormEdit = ({ user, onEdit, onCancel }) => {
           <MenuItem value="SUPERADMIN">SUPERADMIN</MenuItem>
         </Select>
       </FormControl>
-      <div className="flex justify-between">
+      <div className="flex justify-between mt-2">
         <Button
           variant="contained"
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -75,4 +75,4 @@ const FormEdit = ({ user, onEdit, onCancel }) => {
   );
 };
 
-export default FormEdit;
+export default FormEditUser;

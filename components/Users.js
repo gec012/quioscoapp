@@ -8,19 +8,17 @@ import {
   TableHead,
   TableRow,
   Paper,
-  TextField,
   Button,
-  Select,
-  MenuItem,
   IconButton,
 } from "@mui/material";
 
-import { AddCircleOutline, Edit, Delete } from "@mui/icons-material";
+import {  Edit, Delete } from "@mui/icons-material";
 import UserForm from "@/components/UseForm";
-import FormEdit from "@/components/FormEdit";
+import FormEditUser from "@/components/FormEditUser";
 import ModalDelete from "@/components/ModalDelete";
 
-const User = () => {
+
+const Users = () => {
   const [users, setUsers] = useState([]);
 
   const [showPassword, setShowPassword] = useState(false);
@@ -56,7 +54,7 @@ const User = () => {
 
     fetchData();
   }, []);
-
+  console.log('aqui',users)
   const handleRegister = async (newUser) => {
     try {
       const response = await axios.post("/api/users", newUser);
@@ -126,18 +124,20 @@ const User = () => {
 
 
   return (
+
+    <>
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-4">Lista de Usuarios</h1>
       <Button
         variant="contained"
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mb-4 rounded"
         onClick={() => setIsFormVisible(true)}
       >
         Agregar usuario
       </Button>
 
       <TableContainer component={Paper}>
-        <Table>
+        <Table className="shadow-lg">
           <TableHead>
             <TableRow>
               <TableCell>Nombre</TableCell>
@@ -177,9 +177,12 @@ const User = () => {
         onClose={handleCancelDelete}
         onConfirm={handleConfirmDelete}
       />
-      {isFormVisible && <UserForm onRegister={handleRegister} />}
+      {isFormVisible && <UserForm 
+      onRegister={handleRegister} 
+      onCancel={()=>setIsFormVisible(false)}
+      />}
       {isEditFormVisible && (
-         <FormEdit
+         <FormEditUser
          user={editedUser}
          onEdit={(editedUser) => handleEditSubmit(editedUser)}
          onCancel={() => setIsEditFormVisible(false)}
@@ -187,7 +190,8 @@ const User = () => {
       )}
       
     </div>
+    </>
   );
 };
 
-export default User;
+export default Users;

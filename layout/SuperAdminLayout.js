@@ -12,8 +12,8 @@ function SuperAdminLayout({ children, pagina }) {
         <meta name="description" content="Quiosco Cafetería" />
       </Head>
 
-      <div className="md:flex">
-        <aside className="md:w-4/12 xl:w-1/4 2xl:w-1/5 py-5">
+      <div className="md:flex  flex-grow flex-wrap">
+        <aside className=" xl:w-1/4 2xl:w-1/5 py-5 mb-2">
           <Image
             width={300}
             height={100}
@@ -21,10 +21,40 @@ function SuperAdminLayout({ children, pagina }) {
             alt="imagen logotipo"
           />
 
-          <ul className="mt-10">
+          <ul className="">
             <li>
-              <Link href="/users" className="text-blue-500 hover:text-blue-700">
-                Usuarios
+              <Link href="/superadmin">
+                <button className="w-full border-b-2 p-5 hover:bg-amber-400 font-bold hover:cursor-pointer">
+                  Ordenes
+                </button>
+              </Link>
+            </li>
+            <li>
+              <Link href="/superadmin/users">
+                <button className="w-full  border-b-2 p-5 hover:bg-amber-400 font-bold hover:cursor-pointer">
+                  Usuarios
+                </button>
+              </Link>
+            </li>
+            <li>
+              <Link href="/superadmin/usuarios">
+                <button className="w-full border-b-2 p-5 hover:bg-amber-400 font-bold hover:cursor-pointer">
+                  Administracion de Ordenes
+                </button>
+              </Link>
+            </li>
+            <li>
+              <Link href="/superadmin/categories">
+                <button className="w-full border-b-2 b p-5 hover:bg-amber-400 font-bold hover:cursor-pointer">
+                  Administracion de Categorias
+                </button>
+              </Link>
+            </li>
+            <li>
+              <Link href="/superadmin/usuarios">
+                <button className="w-full border-b-2 p-5 hover:bg-amber-400 font-bold hover:cursor-pointer">
+                  Administracion de Productos
+                </button>
               </Link>
             </li>
           </ul>

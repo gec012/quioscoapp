@@ -8,7 +8,7 @@ const Categoria = ({ categoria }) => {
     <div
       className={`${
         categoriaActual?.id === id ? "bg-amber-400" : ""
-      } flex items-center gap-4 w-full border-b-2 border-gray p-5 hover:bg-amber-400`}
+      }  border-b-2 border-gray p-5 hover:bg-amber-400`}
     >
       <button
         type="button"

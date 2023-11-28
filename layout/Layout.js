@@ -36,7 +36,7 @@ export default function Layout({ children, pagina }) {
         <meta name="description" content="Cafeteria" />
       </Head>
       <div className="flex w-full   max-md:flex-col">
-        <aside className="md:w-/12 lg:w-5/12 xl:w-2/4 2xl:w-2/5 p-1 max-md:border-b-2 md:h-screen  ">
+        <aside className="md:w-1/12 lg:w-5/12 xl:w-2/4 2xl:w-2/5 p-1 max-md:border-b-2 md:h-screen  ">
           <Sidebar />
         </aside>
         <main className="">

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { TextField, Button, Select, MenuItem,FormControl,InputLabel } from "@mui/material";
 
-const UserForm = ({ onRegister }) => {
+const UserForm = ({ onRegister,onCancel }) => {
   const [newUser, setNewUser] = useState({
     nombre: "",
     correo: "",
@@ -19,6 +19,9 @@ const UserForm = ({ onRegister }) => {
 
   const handleRegister = () => {
     onRegister(newUser);
+  };
+  const handleCancel = () => {
+    onCancel();
   };
 
   return (
@@ -71,6 +74,7 @@ const UserForm = ({ onRegister }) => {
           <MenuItem value="SUPERADMIN">SUPERADMIN</MenuItem>
         </Select>
       </FormControl>
+      <div div className="flex justify-between mt-2">
       <Button
         variant="contained"
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -78,6 +82,15 @@ const UserForm = ({ onRegister }) => {
       >
         Registrar
       </Button>
+      <Button
+          variant="contained"
+          className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+          onClick={handleCancel}
+        >
+          Cancelar
+      </Button>
+      </div>
+      
     </div>
   );
 };
